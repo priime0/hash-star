@@ -5,6 +5,7 @@
                   ->*
                   any/c
                   any
+                  or/c
                   listof))
 
 (provide
@@ -12,7 +13,7 @@
   #:unprotected-submodule no-contract
   [hash-ref*
    (->* (hash?)
-        (#:else procedure?)
+        (#:else (or/c procedure? #f))
         #:rest (listof any/c)
         any)]))
 
