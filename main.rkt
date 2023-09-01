@@ -35,6 +35,40 @@
           [default (default)]
           [else (hash-ref*-error key layer)])))
 
+;; Recursively traverse the given hashtable, where all but the last
+;; item of `items` represents the keys, and the last item represents
+;; the new value.
+(define (hash-keys-set* ht . items)
+  (define items-reversed (reverse items))
+  (define keys (reverse (cdr items-reversed)))
+  (define val (car items-reversed))
+  (define (split l)
+    (values (car l) (cdr l)))
+  ;; Generate new nested hash tables
+  (define (hash-keys-set*/new keys)
+    (cond [(null? keys) val]
+          [else
+           (define-values (key keys^) (split keys))
+           (define new-val (hash-keys-set*/new keys^))
+           (hash key new-val)]))
+  ;; Recursively traverse the hashtable
+  (define (hash-keys-set*/recur ht keys)
+    (cond [(null? keys) val]
+          [(and (hash? ht)
+                (hash-has-key? ht (car keys)))
+           (define-values (key keys^) (split keys))
+           (define prev-val (hash-ref ht key))
+           (define new-val (hash-keys-set*/recur prev-val keys^))
+           (hash-set ht (car keys) new-val)]
+          ;; Key not contained
+          [(hash? ht)
+           (define-values (key keys^) (split keys))
+           (define new-val (hash-keys-set*/new keys^))
+           (hash-set ht key new-val)]
+          [else
+           (hash-keys-set*/new keys)]))
+  (hash-keys-set*/recur ht keys))
+
 (module+ test
   (require rackunit)
   (require (only-in racket/function
