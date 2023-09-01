@@ -15,7 +15,12 @@
    (->* (hash?)
         (#:else (or/c procedure? #f))
         #:rest (listof any/c)
-        any)]))
+        any)]
+  [hash-keys-set*
+   (->* (hash?)
+        ()
+        #:rest (listof any/c)
+        hash?)]))
 
 (define (hash-ref*-error key layer)
   (error 'hash-ref*
