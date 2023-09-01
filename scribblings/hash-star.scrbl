@@ -43,3 +43,25 @@ into the @racket{#:else} keyword.
              #:else (thunk #f))
 ]
 }
+
+@defproc[(hash-keys-set* [ht hash?]
+                         [key any/c] ...
+                         [val any/c])
+         hash?]{
+
+Traverses through the given hash table @racket{ht} with the
+@racket{key}s in order, creating new nested hash tables if necessary,
+and setting the last key to the given value.
+
+@examples[#:eval ev
+  (hash-keys-set* (hash) 'a 5)
+  
+  (hash-keys-set* (hash 'a 5) 'a 6)
+
+  (hash-keys-set* (hash 'a (hash 'b 5)) 'a 'b 6)
+
+  (hash-keys-set* (hash 'a (hash 'b 5)) 'a 'c 8)
+
+  (hash-keys-set* (hash) 'a 'b 'c 'd)
+]
+}
