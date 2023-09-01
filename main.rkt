@@ -154,3 +154,58 @@
    exn:fail?
    (thunk (hash-ref* (hash' (hash'b 5))
                      'a 'b 'c))))
+
+(module+ test
+  (test-equal?
+   "empty hash, single key"
+   (hash-keys-set* (hash) 'a 5)
+   (hash 'a 5))
+
+  (test-equal?
+   "empty hash, multiple keys"
+   (hash-keys-set* (hash) 'a 'b 5)
+   (hash 'a (hash 'b 5)))
+
+  (test-equal?
+   "simple hash, single non-conflicting key"
+   (hash-keys-set* (hash 'a 5) 'b 6)
+   (hash 'a 5 'b 6))
+
+  (test-equal?
+   "simple hash, single conflicting key"
+   (hash-keys-set* (hash 'a 5) 'a 6)
+   (hash 'a 6))
+
+  (test-equal?
+   "simple hash, multiple non-conflicting keys"
+   (hash-keys-set* (hash 'a 5) 'b 'c 7)
+   (hash 'a 5
+         'b (hash 'c 7)))
+
+  (test-equal?
+   "simple hash, multiple keys with conflict"
+   (hash-keys-set* (hash 'a 5) 'a 'b 'c 1)
+   (hash 'a (hash 'b (hash 'c 1))))
+
+  (test-equal?
+   "complex hash, single non-conflicting key"
+   (hash-keys-set* (hash 'a (hash 'b 5))
+              'b 7)
+   (hash 'a (hash 'b 5)
+         'b 7))
+
+  (test-equal?
+   "complex hash, single conflicting key"
+   (hash-keys-set* (hash 'a (hash 'b 5)) 'a 3)
+   (hash 'a 3))
+
+  (test-equal?
+   "complex hash, multiple non-conflicting keys"
+   (hash-keys-set* (hash 'a (hash 'b 5)) 'b 'c 3)
+   (hash 'a (hash 'b 5)
+         'b (hash 'c 3)))
+
+  (test-equal?
+   "complex hash, multiple keys with conflict"
+   (hash-keys-set* (hash 'a (hash 'b 5)) 'a 'b 3)
+   (hash 'a (hash 'b 3))))
