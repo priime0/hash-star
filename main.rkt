@@ -12,7 +12,7 @@
   #:unprotected-submodule no-contract
   [hash-ref*
    (->* (hash?)
-        (#:else any/c)
+        (#:else procedure?)
         #:rest (listof any/c)
         any)]))
 
