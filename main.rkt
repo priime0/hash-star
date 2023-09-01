@@ -91,4 +91,31 @@
    (hash-ref* (hash 'a (hash 'b 5))
               'a 'b 'c
               #:else (thunk 2))
-   2))
+   2)
+
+  (test-exn
+   "empty hash, key not contained"
+   exn:fail?
+   (thunk (hash-ref* (hash) 'a)))
+
+  (test-exn
+   "simple hash, key not contained"
+   exn:fail?
+   (thunk (hash-ref* (hash 'a 5) 'b)))
+
+  (test-exn
+   "simple hash, keys not contained"
+   exn:fail?
+   (thunk (hash-ref* (hash 'a 5) 'a 'b)))
+
+  (test-exn
+   "complex hash, keys not contained"
+   exn:fail?
+   (thunk (hash-ref* (hash 'a (hash 'b 6))
+                     'a 'c)))
+
+  (test-exn
+   "complex hash, deeper keys not contained"
+   exn:fail?
+   (thunk (hash-ref* (hash' (hash'b 5))
+                     'a 'b 'c))))
