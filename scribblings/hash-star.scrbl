@@ -17,7 +17,7 @@ tables, specifically nested hash tables.
 
 @defproc[(hash-ref* [ht hash?]
                     [key any/c] ...
-                    [#:else default any/c #f])
+                    [#:else default (or/c procedure? #f) #f])
          any]{
 
 Traverses through the given hash table @racket{ht} with the
