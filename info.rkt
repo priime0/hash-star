@@ -5,6 +5,6 @@
 (define build-deps '("scribble-lib" "racket-doc" "rackunit-lib"))
 (define scribblings '(("scribblings/hash-star.scrbl" ())))
 (define pkg-desc "Utility functions for traversing hashtable structures")
-(define version "0.1")
+(define version "0.2")
 (define pkg-authors '(priime0))
 (define license 'MIT)
